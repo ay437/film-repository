@@ -1,22 +1,38 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
+const axios = require('axios');
 
 /* GET home page. */
 router.get("/", function(req, res, next) {
   res.render("index", { title: "Express" });
 });
 
-router.post("/subscribe", function(req, res, next) {
-  const { name, email } = req.body;
+router.post("/film-information", async (req, res) => {
+  const { name } = req.body;
 
-  // 1. Validate the user data
-  // 2. Subscribe the user to the mailing list
-  // 3. Send a confirmation email
+  const filmRequest = axios.get(`https://www.omdbapi.com/?apikey=1062f492&t=${name}`)
+  .then(({ data }) => data)
+  .catch((error) => console.log(error))
 
-  res.render("subscribed", {
-    title: "You are subscribed",
+  let filmData = await filmRequest;
+
+  console.log(filmData);
+
+  const { Title, Year, Released, Runtime, Genre, Director, Actors, Plot, Language, Poster, imdbRating } = filmData;
+
+  res.render("filmInformation", {
     name,
-    email
+    Title,
+    Year,
+    Released,
+    Runtime,
+    Genre,
+    Director,
+    Actors,
+    Plot,
+    Language,
+    Poster,
+    imdbRating
   });
 });
 
