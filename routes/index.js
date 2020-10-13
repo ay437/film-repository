@@ -3,7 +3,7 @@ const router = express.Router();
 const axios = require('axios');
 
 /* GET home page. */
-router.get("/", function(req, res, next) {
+router.get("/", function(req, res) {
   res.render("index", { title: "Express" });
 });
 
@@ -14,16 +14,13 @@ router.post("/film-information", async (req, res) => {
   .then(({ data }) => data)
   .catch((error) => console.log(error))
 
-  let filmData = await filmRequest;
+  const filmData = await filmRequest;
 
-  console.log(filmData);
-
-  const { Title, Year, Released, Runtime, Genre, Director, Actors, Plot, Language, Poster, imdbRating } = filmData;
+  const { Title, Released, Runtime, Genre, Director, Actors, Plot, Language, Poster, imdbRating } = filmData;
 
   res.render("filmInformation", {
     name,
     Title,
-    Year,
     Released,
     Runtime,
     Genre,
